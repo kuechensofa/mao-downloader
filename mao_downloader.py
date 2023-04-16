@@ -57,7 +57,7 @@ def convert_to_pnm(download_dir, pnm_dir):
         subprocess.run(['convert', os.path.join(download_dir, file), os.path.join(pnm_dir, pnm_name)])
 
 
-def convert_to_pdf(pnm_dir, output_path, dpi=300):
+def convert_to_pdf(pnm_dir, output_path, dpi=300.0):
     subprocess.run(['convert', '-density', str(floor(dpi)), os.path.join(pnm_dir, '*.pnm'), output_path])
 
 
