@@ -10,7 +10,12 @@ from PIL import Image
 from math import floor
 
 
-A4_WIDTH_INCH = 11.69
+PAPER_WIDTHS = {
+    'a3': 16.54,
+    'a4': 11.69,
+    'a5': 8.268,
+    'a6': 5.827
+}
 
 
 def download_images(url, download_dir):
@@ -32,7 +37,7 @@ def download_images(url, download_dir):
             f.write(img_result.content)
 
 
-def get_dpi(download_dir):
+def get_dpi(download_dir, paper_format):
     max_width = 0
 
     for file in os.listdir(download_dir):
@@ -43,7 +48,7 @@ def get_dpi(download_dir):
         if longest_side > max_width:
             max_width = longest_side
 
-    dpi = max_width / A4_WIDTH_INCH
+    dpi = max_width / PAPER_WIDTHS[paper_format]
     return dpi
 
 
@@ -70,6 +75,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('url')
     parser.add_argument('output')
+    parser.add_argument('--format', choices=['a3', 'a4', 'a5', 'a6'], default='a4')
     args = parser.parse_args()
 
     tempdir = TemporaryDirectory()
@@ -77,7 +83,7 @@ def main():
     download_dir = os.path.join(tempdir.name, 'download')
     download_images(args.url, download_dir)
 
-    image_dpi = get_dpi(download_dir)
+    image_dpi = get_dpi(download_dir, args.format)
 
     pnm_dir = os.path.join(tempdir.name, 'pnm')
     convert_to_pnm(download_dir, pnm_dir)
