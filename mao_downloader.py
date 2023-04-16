@@ -29,24 +29,26 @@ def download_images(url, download_dir):
             f.write(img_result.content)
 
 
-def convert_to_pdf(download_dir, output_path):
+def convert_to_pdf(download_dir, output_path, pagesize):
     images = [os.path.join(download_dir, file) for file in os.listdir(download_dir)]
     images = sorted(images)
+    layout_fun = img2pdf.get_layout_fun(pagesize=pagesize)
     with open(output_path, 'wb') as f:
-        f.write(img2pdf.convert(images))
+        f.write(img2pdf.convert(images, layout_fun=layout_fun))
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('url')
     parser.add_argument('output')
+    parser.add_argument('--format', metavar="LxL", type=img2pdf.parse_pagesize_rectarg)
     args = parser.parse_args()
 
     tempdir = TemporaryDirectory()
 
     download_dir = tempdir.name
     download_images(args.url, download_dir)
-    convert_to_pdf(download_dir, args.output)
+    convert_to_pdf(download_dir, args.output, args.format)
 
     tempdir.cleanup()
 
