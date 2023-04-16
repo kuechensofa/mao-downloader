@@ -11,11 +11,6 @@ und können so installiert werden:
 
     pip install -r requirements.txt
 
-Zusätzlich sind zur Nutzung noch die folgenden Debian-Pakete nötig:
-
-  * `ghostscript`
-  * `imagemagick`
-
 Benutzung:
 
     python mao_downloader.py URL PDF_PFAD
